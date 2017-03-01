@@ -1,0 +1,50 @@
+{
+  "name": "@akashic/complete-audio",
+  "version": "0.1.1",
+  "description": "complement audio asset files",
+  "main": "lib/complete.js",
+  "scripts": {
+    "prepublish": "gulp clean && npm run install:typings && npm run build",
+    "start": "npm run build && node bin/run",
+    "install:typings": "typings install",
+    "build": "tsc -p .",
+    "lint": "gulp lint && gulp lint-md",
+    "test": "gulp test && npm run lint"
+  },
+  "author": "DWANGO Co., Ltd.",
+  "license": "MIT",
+  "bin": {
+    "complete-audio": "./bin/run"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "devDependencies": {
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-istanbul": "~0.6.0",
+    "gulp-jasmine": "~2.0.0",
+    "gulp-shell": "^0.5.2",
+    "gulp-tslint": "^2.0.0",
+    "typescript": "^1.7.5",
+    "typings": "^2.1.0",
+    "jasmine": "~2.1.1",
+    "jasmine-reporters": "~2.0.4",
+    "jasmine-terminal-reporter": "~0.9.1",
+    "mdast": "^2.0.0",
+    "mdast-lint": "^1.1.1",
+    "mock-fs": "^3.12.1"
+  },
+  "dependencies": {
+    "commander": "^2.9.0",
+    "fluent-ffmpeg": "^2.0.1"
+  },
+  "publishConfig": {
+    "@akashic:registry": "http://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashic-games/complete-audio.git"
+  }
+}
