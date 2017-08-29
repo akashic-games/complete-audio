@@ -4,7 +4,7 @@ import ffmpeg = require("fluent-ffmpeg");
 import readline = require("readline");
 
 class Complete {
-	mp4Encoders: string[] = ["libfdk_aac", "aac", "default"];
+	aacEncoders: string[] = ["libfaac", "libvo_aacenc", "default"];
 	oggEncoders: string[] = ["libvorbis", "default"];
 	overwrite: string = "question";
 
@@ -91,9 +91,9 @@ class Complete {
 		loop(0);
 	}
 
-	toMP4(filepath: string, cb: (err?: any) => void): void {
-		var output = this.replaceExt(filepath, "mp4");
-		this.selectEncoderAndConvert(this.mp4Encoders, filepath, output, cb);
+	toAAC(filepath: string, cb: (err?: any) => void): void {
+		var output = this.replaceExt(filepath, "aac");
+		this.selectEncoderAndConvert(this.aacEncoders, filepath, output, cb);
 	}
 
 	toOGG(filepath: string, cb: (err?: any) => void): void {
@@ -101,12 +101,12 @@ class Complete {
 		this.selectEncoderAndConvert(this.oggEncoders, filepath, output, cb);
 	}
 
-	toOGGAndMP4(filepath: string, cb: (err?: any) => void): void {
+	toOGGAndAAC(filepath: string, cb: (err?: any) => void): void {
 		this.toOGG(filepath, (err?: any) => {
 			if (err) {
 				cb(err);
 			} else {
-				this.toMP4(filepath, cb);
+				this.toAAC(filepath, cb);
 			}
 		});
 	}
@@ -115,19 +115,19 @@ class Complete {
 		var ext = path.extname(filepath);
 		switch (ext) {
 		case ".wav":
-			this.toOGGAndMP4(filepath, cb);
+			this.toOGGAndAAC(filepath, cb);
 			break;
 		case ".aac":
-			this.toOGGAndMP4(filepath, cb);
-			break;
-		case ".ogg":
-			this.toMP4(filepath, cb);
-			break;
-		case ".mp4":
 			this.toOGG(filepath, cb);
 			break;
+		case ".ogg":
+			this.toAAC(filepath, cb);
+			break;
+		case ".mp4":
+			this.toOGGAndAAC(filepath, cb);
+			break;
 		default:
-			cb("ERR: " + filepath + " must be wav, ogg or aac.");
+			cb("ERR: " + filepath + " must be wav, aac, ogg or mp4.");
 			break;
 		}
 	}

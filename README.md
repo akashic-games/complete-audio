@@ -6,9 +6,9 @@
 
 Akashic Engineのゲームに必要な音声ファイルの形式を取り揃えるための変換ツールです。
 
-* wavファイルをoggファイルとmp4ファイルに変換
-* aacファイルをoggファイルとmp4ファイルに変換
-* oggファイルとmp4ファイルを相互に変換
+* wavファイルをoggファイルとaacファイルに変換
+* mp4ファイルをoggファイルとaacファイルに変換
+* oggファイルとaacファイルを相互に変換
 
 以上の機能を実装しています。
 
@@ -38,10 +38,10 @@ libvorbis > ffmpeg default
 
 の順に使用されます。
 
-mp4ファイルを生成するときに `libfdk_aac` か `aac` が存在する場合は
+aacファイルを生成するときに `libfaac` か `libvo_aacenc` が存在する場合は
 
 ```
-libfdk_aac > aac > ffmpeg default
+libfaac > libvo_aacenc > ffmpeg default
 ```
 
 の順に使用されます。

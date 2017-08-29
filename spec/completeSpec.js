@@ -41,7 +41,7 @@ describe("complete", function() {
 		});
 	});
 
-	it("OGGToMP4", function(done) {
+	it("OGGToAAC", function(done) {
 		var complete = new Complete();
 		var exit = function(err) {
 			expect(err).toBeUndefined();
@@ -56,14 +56,14 @@ describe("complete", function() {
 		};
 		complete.convert = function(input, output, codec, cb) {
 			expect(input).toBe("foo.ogg");
-			expect(output).toBe("foo.mp4");
+			expect(output).toBe("foo.aac");
 			expect(codec).toBe("default");
 			cb();
 		};
-		complete.toMP4("foo.ogg", exit);
+		complete.toAAC("foo.ogg", exit);
 	});
 
-	it("MP4ToOGG", function(done) {
+	it("AACToOGG", function(done) {
 		var complete = new Complete();
 		var exit = function(err) {
 			expect(err).toBeUndefined();
@@ -77,17 +77,17 @@ describe("complete", function() {
 			}
 		};
 		complete.convert = function(input, output, codec, cb) {
-			expect(input).toBe("foo.mp4");
+			expect(input).toBe("foo.aac");
 			expect(output).toBe("foo.ogg");
 			expect(codec).toBe("default");
 			cb();
 		};
-		complete.toOGG("foo.mp4", exit);
+		complete.toOGG("foo.aac", exit);
 	});
 
-	it("toOGGAndMP4 - wav", function(done) {
+	it("toOGGAndAAC - wav", function(done) {
 		var convertedMap = {
-			"foo.mp4": false,
+			"foo.aac": false,
 			"foo.ogg": false
 		};
 		var complete = new Complete();
@@ -98,18 +98,18 @@ describe("complete", function() {
 		complete.convert = function(input, output, codec, cb) {
 			expect(convertedMap[output]).toBe(false);
 			convertedMap[output] = true;
-			if (convertedMap["foo.mp4"] && convertedMap["foo.ogg"]) {
+			if (convertedMap["foo.aac"] && convertedMap["foo.ogg"]) {
 				exit();
 			} else {
 				cb();
 			}
 		};
-		complete.toOGGAndMP4("foo.wav", exit);
+		complete.toOGGAndAAC("foo.wav", exit);
 	});
 
-	it("toOGGAndMP4 - aac", function(done) {
+	it("toOGGAndAAC - mp4", function(done) {
 		var convertedMap = {
-			"foo.mp4": false,
+			"foo.aac": false,
 			"foo.ogg": false
 		};
 		var complete = new Complete();
@@ -120,18 +120,18 @@ describe("complete", function() {
 		complete.convert = function(input, output, codec, cb) {
 			expect(convertedMap[output]).toBe(false);
 			convertedMap[output] = true;
-			if (convertedMap["foo.mp4"] && convertedMap["foo.ogg"]) {
+			if (convertedMap["foo.aac"] && convertedMap["foo.ogg"]) {
 				exit();
 			} else {
 				cb();
 			}
 		};
-		complete.toOGGAndMP4("foo.aac", exit);
+		complete.toOGGAndAAC("foo.mp4", exit);
 	});
 
 	it("auto wav", function(done) {
 		var complete = new Complete();
-		complete.toOGGAndMP4 = function(filepath, cb) {
+		complete.toOGGAndAAC = function(filepath, cb) {
 			expect(filepath).toBe("foo.wav");
 			expect(cb).toBeUndefined();
 			done();
@@ -141,7 +141,7 @@ describe("complete", function() {
 
 	it("auto ogg", function(done) {
 		var complete = new Complete();
-		complete.toMP4 = function(filepath, cb) {
+		complete.toAAC = function(filepath, cb) {
 			expect(filepath).toBe("foo.ogg");
 			expect(cb).toBeUndefined();
 			done();
@@ -149,20 +149,20 @@ describe("complete", function() {
 		complete.auto("foo.ogg", undefined);
 	});
 
-	it("auto mp4", function(done) {
+	it("auto aac", function(done) {
 		var complete = new Complete();
 		complete.toOGG = function(filepath, cb) {
-			expect(filepath).toBe("foo.mp4");
+			expect(filepath).toBe("foo.aac");
 			expect(cb).toBeUndefined();
 			done();
 		};
-		complete.auto("foo.mp4", undefined);
+		complete.auto("foo.aac", undefined);
 	});
 
 	it("auto error", function(done) {
 		var complete = new Complete();
 		complete.auto("foo.mp3", function(err) {
-			expect(err).toBe("ERR: foo.mp3 must be wav, ogg or aac.");
+			expect(err).toBe("ERR: foo.mp3 must be wav, aac, ogg or mp4.");
 			done();
 		});
 	});
