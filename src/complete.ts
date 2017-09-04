@@ -126,6 +126,9 @@ class Complete {
 		case ".mp4":
 			this.toOGGAndAAC(filepath, cb);
 			break;
+		case ".mp3":
+			this.toOGGAndAAC(filepath, cb);
+			break;
 		default:
 			cb("ERR: " + filepath + " must be wav, aac, ogg or mp4.");
 			break;
