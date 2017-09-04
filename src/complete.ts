@@ -124,8 +124,6 @@ class Complete {
 			this.toAAC(filepath, cb);
 			break;
 		case ".mp4":
-			this.toOGGAndAAC(filepath, cb);
-			break;
 		case ".mp3":
 			this.toOGGAndAAC(filepath, cb);
 			break;
