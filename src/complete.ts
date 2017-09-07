@@ -5,7 +5,7 @@ import readline = require("readline");
 
 class Complete {
 	aacEncoders: string[] = ["libfaac", "libvo_aacenc", "default"];
-	oggEncoders: string[] = ["libvorbis", "default"];
+	oggEncoders: string[] = ["libvorbis"];
 	overwrite: string = "question";
 
 	constructor(ffmpegPath?: string) {
@@ -83,6 +83,10 @@ class Complete {
 					} else {
 						if (index < encoders.length - 1) {
 							loop(index + 1);
+						} else {
+							if (path.extname(output) === ".ogg") {
+								console.log("Cannot covert Ogg vorbis without libvorbis. Compile your ffmpeg with '--enable_libvorbis' or reinstall ffmpeg with libborvis.");
+							}
 						}
 					}
 				}
