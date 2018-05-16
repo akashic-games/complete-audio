@@ -22,7 +22,7 @@ var options = {
 	rate: commander.rate ? Number(commander.rate) : null
 };
 
-var complete = new Complete(options, commander.ffmpeg);
+var complete = new Complete.Complete(options, commander.ffmpeg);
 if (commander.force && commander.ignore) {
 	console.log("You can not provide force and ignore at the same time");
 	process.exit(1);
