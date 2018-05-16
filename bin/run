@@ -10,16 +10,16 @@ commander
 	.option("-f, --force", "出力ファイルが既に存在する場合、上書きする")
 	.option("-i, --ignore", "出力ファイルが既に存在する場合、上書きしない")
 	.option("--ffmpeg <path>", "ffmpegのバイナリのフルパスを直接指定する場合に使うオプション")
-	.option("-ab <bitrate>", "出力する音声のビットレート")
-	.option("-ac <channels>", "出力する音声のチャンネル数")
-	.option("-ar <rate>", "出力する音声のサンプリングレート")
+	.option("-b, --bitrate <bitrate>", "出力する音声のビットレート")
+	.option("-c, --channels <channels>", "出力する音声のチャンネル数")
+	.option("-r, --rate <rate>", "出力する音声のサンプリングレート")
 	.parse(process.argv);
 
 var filepath = commander.args[0];
 var options = {
-	bitrate: commander.bitrate ? Number(commander.bitrate) : null,
-	channels: commander.channels ? Number(commander.channels) : null,
-	rate: commander.rate ? Number(commander.rate) : null
+	bitrate: commander["bitrate"] ? Number(commander["bitrate"]) : null,
+	channels: commander["channels"] ? Number(commander["channels"]) : null,
+	rate: commander["rate"] ? Number(commander["rate"]) : null
 };
 
 var complete = new Complete.Complete(options, commander.ffmpeg);
