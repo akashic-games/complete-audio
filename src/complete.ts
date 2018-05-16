@@ -3,12 +3,20 @@ import path = require("path");
 import ffmpeg = require("fluent-ffmpeg");
 import readline = require("readline");
 
-class Complete {
+export interface FfmpegOption {
+	bitrate?: number;
+	channels?: number;
+	rate?: number;
+}
+
+export class Complete {
 	aacEncoders: string[] = ["libfaac", "libvo_aacenc", "default"];
 	oggEncoders: string[] = ["libvorbis"];
 	overwrite: string = "question";
+	option: FfmpegOption;
 
-	constructor(ffmpegPath?: string) {
+	constructor(option: FfmpegOption ,ffmpegPath?: string) {
+		this.option = option;
 		if (ffmpegPath)
 			ffmpeg.setFfmpegPath(ffmpegPath);
 	}
@@ -45,6 +53,13 @@ class Complete {
 		} else {
 			converter = converter.addOption("-strict 2");
 		}
+
+		var options = "";
+		if (this.option.bitrate) options += " -ab " + this.option.bitrate;
+		if (this.option.channels) options += " -ac " + this.option.channels;
+		if (this.option.rate) options += " -ar " + this.option.rate;
+		converter = converter.addOption(options);
+
 		converter = converter.output(output)
 			.on("end", () => {
 				console.log("write " + output);
@@ -137,5 +152,3 @@ class Complete {
 		}
 	}
 }
-
-export = Complete;
