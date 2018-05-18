@@ -10,16 +10,16 @@ commander
 	.option("-f, --force", "出力ファイルが既に存在する場合、上書きする")
 	.option("-i, --ignore", "出力ファイルが既に存在する場合、何もしない")
 	.option("--ffmpeg <path>", "ffmpegのバイナリのフルパスを直接指定する場合に使うオプション")
-	.option("-b, --bitrate <bitrate>", "出力する音声のビットレート（experimental）")
-	.option("-c, --channels <channels>", "出力する音声のチャンネル数")
-	.option("-r, --rate <rate>", "出力する音声のサンプリングレート")
+	.option("-b, --bitrate <bitrate>", "出力する音声のビットレート（experimental）", parseInt10)
+	.option("-c, --channels <channels>", "出力する音声のチャンネル数", parseInt10)
+	.option("-r, --rate <rate>", "出力する音声のサンプリングレート", parseInt10)
 	.parse(process.argv);
 
 var filepath = commander.args[0];
 var options = {
-	bitrate: commander["bitrate"] ? Number(commander["bitrate"]) : null,
-	channels: commander["channels"] ? Number(commander["channels"]) : null,
-	rate: commander["rate"] ? Number(commander["rate"]) : null
+	bitrate: commander["bitrate"] ? commander["bitrate"] : null,
+	channels: commander["channels"] ? commander["channels"] : null,
+	rate: commander["rate"] ? commander["rate"] : null
 };
 
 var complete = new Complete.Complete(options, commander.ffmpeg);
@@ -46,4 +46,8 @@ if (commander.force && commander.ignore) {
 		});
 	};
 	loop(0);
+}
+
+function parseInt10(n) {
+	return parseInt(n, 10);
 }
