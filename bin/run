@@ -8,9 +8,9 @@ commander
 	.version(pkg.version)
 	.usage("<filepath> <options>")
 	.option("-f, --force", "出力ファイルが既に存在する場合、上書きする")
-	.option("-i, --ignore", "出力ファイルが既に存在する場合、上書きしない")
+	.option("-i, --ignore", "出力ファイルが既に存在する場合、何もしない")
 	.option("--ffmpeg <path>", "ffmpegのバイナリのフルパスを直接指定する場合に使うオプション")
-	.option("-b, --bitrate <bitrate>", "出力する音声のビットレート")
+	.option("-b, --bitrate <bitrate>", "出力する音声のビットレート（experimental）")
 	.option("-c, --channels <channels>", "出力する音声のチャンネル数")
 	.option("-r, --rate <rate>", "出力する音声のサンプリングレート")
 	.parse(process.argv);
