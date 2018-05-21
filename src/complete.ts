@@ -15,7 +15,7 @@ export class Complete {
 	overwrite: string = "question";
 	option: FfmpegOption;
 
-	constructor(option: Partial<FfmpegOption> ,ffmpegPath?: string) {
+	constructor(option: Partial<FfmpegOption>, ffmpegPath?: string) {
 		this.option = {...this.option, ...option};
 		if (ffmpegPath)
 			ffmpeg.setFfmpegPath(ffmpegPath);
@@ -98,7 +98,9 @@ export class Complete {
 							loop(index + 1);
 						} else {
 							if (path.extname(output) === ".ogg") {
-								console.log("Cannot covert Ogg vorbis without libvorbis. Compile your ffmpeg with '--enable_libvorbis' or reinstall ffmpeg with libborvis.");
+								console.log(
+									"Cannot covert Ogg vorbis without libvorbis. " +
+									"Compile your ffmpeg with '--enable_libvorbis' or reinstall ffmpeg with libborvis.");
 							}
 						}
 					}
