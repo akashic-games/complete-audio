@@ -10,9 +10,9 @@ commander
 	.option("-f, --force", "出力ファイルが既に存在する場合、上書きする")
 	.option("-i, --ignore", "出力ファイルが既に存在する場合、何もしない")
 	.option("--ffmpeg <path>", "ffmpegのバイナリのフルパスを直接指定する場合に使うオプション")
-	.option("-b, --bitrate <bitrate>", "出力する音声のビットレート（experimental）", parseInt10)
-	.option("-c, --channels <channels>", "出力する音声のチャンネル数", parseInt10)
-	.option("-r, --rate <rate>", "出力する音声のサンプリングレート", parseInt10)
+	.option("-b, --bitrate <bitrate>", "出力する音声のビットレート。FFmpegの-abオプションに相当（experimental）", parseInt10)
+	.option("-c, --channels <channels>", "出力する音声のチャンネル数。FFmpegの-acオプションに相当", parseInt10)
+	.option("-r, --rate <rate>", "出力する音声のサンプリングレート。FFmpegの-arオプションに相当", parseInt10)
 	.parse(process.argv);
 
 var filepath = commander.args[0];
