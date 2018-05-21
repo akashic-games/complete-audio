@@ -54,9 +54,9 @@ export class Complete {
 			converter = converter.addOption("-strict 2");
 		}
 
-		if (!!this.option.bitrate) converter = converter.addOption("-ab " + this.option.bitrate);
-		if (!!this.option.channels) converter = converter.addOption("-ac " + this.option.channels);
-		if (!!this.option.rate) converter = converter.addOption("-ar " + this.option.rate);
+		if (this.option.bitrate) converter = converter.addOption("-ab " + this.option.bitrate);
+		if (this.option.channels) converter = converter.addOption("-ac " + this.option.channels);
+		if (this.option.rate) converter = converter.addOption("-ar " + this.option.rate);
 
 		converter = converter.output(output)
 			.on("end", () => {
