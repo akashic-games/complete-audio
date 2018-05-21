@@ -4,9 +4,9 @@ import ffmpeg = require("fluent-ffmpeg");
 import readline = require("readline");
 
 export interface FfmpegOption {
-	bitrate?: number;
-	channels?: number;
-	rate?: number;
+	bitrate: number;
+	channels: number;
+	rate: number;
 }
 
 export class Complete {
@@ -15,8 +15,8 @@ export class Complete {
 	overwrite: string = "question";
 	option: FfmpegOption;
 
-	constructor(option: FfmpegOption ,ffmpegPath?: string) {
-		this.option = option;
+	constructor(option: Partial<FfmpegOption> ,ffmpegPath?: string) {
+		this.option = {...this.option, ...option};
 		if (ffmpegPath)
 			ffmpeg.setFfmpegPath(ffmpegPath);
 	}
