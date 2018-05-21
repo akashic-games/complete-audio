@@ -1,4 +1,4 @@
-var Complete = new require("../lib/complete");
+var Complete = new require("../lib/complete").Complete;
 var fs = require("fs");
 var path = require("path");
 var ffmpeg = require("fluent-ffmpeg");
