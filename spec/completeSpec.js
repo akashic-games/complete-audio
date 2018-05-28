@@ -18,14 +18,14 @@ describe("complete", function() {
 			expect(path).toBe("/hoge/fuga/bin/ffmpeg");
 			done();
 		};
-		var complete = new Complete("/hoge/fuga/bin/ffmpeg");
+		var complete = new Complete({}, "/hoge/fuga/bin/ffmpeg");
 	});
 
 	it("isAvailable", function(done) {
 		ffmpeg.getAvailableCodecs = function(cb) {
 			cb(undefined, {hoge: "dummy", foo: "dummy", bar: "dummy"});
 		};
-		var complete = new Complete();
+		var complete = new Complete({});
 		complete.isAvailable("hoge", function(can) {
 			expect(can).toBe(true);
 			complete.isAvailable("foo", function(can2) {
@@ -42,7 +42,7 @@ describe("complete", function() {
 	});
 
 	it("OGGToAAC", function(done) {
-		var complete = new Complete();
+		var complete = new Complete({});
 		var exit = function(err) {
 			expect(err).toBeUndefined();
 			done();
@@ -64,7 +64,7 @@ describe("complete", function() {
 	});
 
 	it("AACToOGG", function(done) {
-		var complete = new Complete();
+		var complete = new Complete({});
 		var exit = function(err) {
 			expect(err).toBeUndefined();
 			done();
@@ -90,7 +90,7 @@ describe("complete", function() {
 			"foo.aac": false,
 			"foo.ogg": false
 		};
-		var complete = new Complete();
+		var complete = new Complete({});
 		var exit = function(err) {
 			expect(err).toBeUndefined();
 			done();
@@ -112,7 +112,7 @@ describe("complete", function() {
 			"foo.aac": false,
 			"foo.ogg": false
 		};
-		var complete = new Complete();
+		var complete = new Complete({});
 		var exit = function(err) {
 			expect(err).toBeUndefined();
 			done();
@@ -130,7 +130,7 @@ describe("complete", function() {
 	});
 
 	it("auto wav", function(done) {
-		var complete = new Complete();
+		var complete = new Complete({});
 		complete.toOGGAndAAC = function(filepath, cb) {
 			expect(filepath).toBe("foo.wav");
 			expect(cb).toBeUndefined();
@@ -140,7 +140,7 @@ describe("complete", function() {
 	});
 
 	it("auto ogg", function(done) {
-		var complete = new Complete();
+		var complete = new Complete({});
 		complete.toAAC = function(filepath, cb) {
 			expect(filepath).toBe("foo.ogg");
 			expect(cb).toBeUndefined();
@@ -150,7 +150,7 @@ describe("complete", function() {
 	});
 
 	it("auto aac", function(done) {
-		var complete = new Complete();
+		var complete = new Complete({});
 		complete.toOGG = function(filepath, cb) {
 			expect(filepath).toBe("foo.aac");
 			expect(cb).toBeUndefined();
@@ -160,7 +160,7 @@ describe("complete", function() {
 	});
 
 	it("auto error", function(done) {
-		var complete = new Complete();
+		var complete = new Complete({});
 		complete.auto("foo.mp3", function(err) {
 			expect(err).toBe("ERR: foo.mp3 must be wav, aac, ogg or mp4.");
 			done();

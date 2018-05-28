@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var pkg = require("../package.json");
-var Complete = new require("../lib/complete");
+var Complete = require("../lib/complete").Complete;
 var commander = require("commander");
 
 commander
@@ -10,9 +10,9 @@ commander
 	.option("-f, --force", "出力ファイルが既に存在する場合、上書きする")
 	.option("-i, --ignore", "出力ファイルが既に存在する場合、何もしない")
 	.option("--ffmpeg <path>", "ffmpegのバイナリのフルパスを直接指定する場合に使うオプション")
-	.option("-b, --bitrate <bitrate>", "出力する音声のビットレート。FFmpegの-abオプションに相当（experimental）", parseInt10)
-	.option("-c, --channels <channels>", "出力する音声のチャンネル数。FFmpegの-acオプションに相当", parseInt10)
-	.option("-r, --rate <rate>", "出力する音声のサンプリングレート。FFmpegの-arオプションに相当", parseInt10)
+	.option("-b, --bitrate <bitrate>", "出力する音声のビットレート。FFmpegの-abオプションに相当（experimental）")
+	.option("-c, --channels <channels>", "出力する音声のチャンネル数。FFmpegの-acオプションに相当")
+	.option("-r, --rate <rate>", "出力する音声のサンプリングレート。FFmpegの-arオプションに相当")
 	.parse(process.argv);
 
 var filepath = commander.args[0];
@@ -22,7 +22,7 @@ var options = {
 	rate: commander["rate"] ? commander["rate"] : null
 };
 
-var complete = new Complete.Complete(options, commander.ffmpeg);
+var complete = new Complete(options, commander.ffmpeg);
 if (commander.force && commander.ignore) {
 	console.log("You can not provide force and ignore at the same time");
 	process.exit(1);
@@ -46,8 +46,4 @@ if (commander.force && commander.ignore) {
 		});
 	};
 	loop(0);
-}
-
-function parseInt10(n) {
-	return parseInt(n, 10);
 }

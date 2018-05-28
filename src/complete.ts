@@ -4,9 +4,9 @@ import ffmpeg = require("fluent-ffmpeg");
 import readline = require("readline");
 
 export interface FfmpegOption {
-	bitrate: number;
-	channels: number;
-	rate: number;
+	bitrate?: string;
+	channels?: string;
+	rate?: string;
 }
 
 export class Complete {
@@ -15,8 +15,12 @@ export class Complete {
 	overwrite: string = "question";
 	option: FfmpegOption;
 
-	constructor(option: Partial<FfmpegOption>, ffmpegPath?: string) {
-		this.option = {...this.option, ...option};
+	constructor(option: FfmpegOption, ffmpegPath?: string) {
+		this.option = {
+			bitrate: option.bitrate,
+			channels: option.channels,
+			rate: option.rate
+		};
 		if (ffmpegPath)
 			ffmpeg.setFfmpegPath(ffmpegPath);
 	}
@@ -46,7 +50,6 @@ export class Complete {
 	}
 
 	convert(input: string, output: string, codec: string, cb: (err?: any) => void): void {
-		console.log("***", "convert", input, "to", output, "with", codec, "encoder", "***");
 		var converter = ffmpeg(input);
 		if (codec !== "default") {
 			converter = converter.addOption("-acodec " + codec);
@@ -54,9 +57,9 @@ export class Complete {
 			converter = converter.addOption("-strict 2");
 		}
 
-		if (this.option.bitrate) converter = converter.addOption("-ab " + this.option.bitrate);
-		if (this.option.channels) converter = converter.addOption("-ac " + this.option.channels);
-		if (this.option.rate) converter = converter.addOption("-ar " + this.option.rate);
+		if (!!this.option.bitrate) converter = converter.addOption("-ab " + this.option.bitrate);
+		if (!!this.option.channels) converter = converter.addOption("-ac " + this.option.channels);
+		if (!!this.option.rate) converter = converter.addOption("-ar " + this.option.rate);
 
 		converter = converter.output(output)
 			.on("end", () => {
