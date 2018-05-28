@@ -15,12 +15,8 @@ export class Complete {
 	overwrite: string = "question";
 	option: FfmpegOption;
 
-	constructor(option: FfmpegOption, ffmpegPath?: string) {
-		this.option = {
-			bitrate: option.bitrate,
-			channels: option.channels,
-			rate: option.rate
-		};
+	constructor(option: FfmpegOption = {}, ffmpegPath?: string) {
+		this.option = option;
 		if (ffmpegPath)
 			ffmpeg.setFfmpegPath(ffmpegPath);
 	}

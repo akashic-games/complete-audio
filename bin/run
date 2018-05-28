@@ -17,9 +17,9 @@ commander
 
 var filepath = commander.args[0];
 var options = {
-	bitrate: commander["bitrate"] ? commander["bitrate"] : null,
-	channels: commander["channels"] ? commander["channels"] : null,
-	rate: commander["rate"] ? commander["rate"] : null
+	bitrate: commander["bitrate"],
+	channels: commander["channels"],
+	rate: commander["rate"]
 };
 
 var complete = new Complete(options, commander.ffmpeg);
