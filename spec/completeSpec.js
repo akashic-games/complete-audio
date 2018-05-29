@@ -1,4 +1,4 @@
-var Complete = new require("../lib/complete");
+var Complete = new require("../lib/complete").Complete;
 var fs = require("fs");
 var path = require("path");
 var ffmpeg = require("fluent-ffmpeg");
@@ -18,7 +18,7 @@ describe("complete", function() {
 			expect(path).toBe("/hoge/fuga/bin/ffmpeg");
 			done();
 		};
-		var complete = new Complete("/hoge/fuga/bin/ffmpeg");
+		var complete = new Complete(null, "/hoge/fuga/bin/ffmpeg");
 	});
 
 	it("isAvailable", function(done) {

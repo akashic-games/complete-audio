@@ -3,12 +3,20 @@ import path = require("path");
 import ffmpeg = require("fluent-ffmpeg");
 import readline = require("readline");
 
-class Complete {
+export interface FfmpegOption {
+	bitrate?: string;
+	channels?: string;
+	rate?: string;
+}
+
+export class Complete {
 	aacEncoders: string[] = ["libfaac", "libvo_aacenc", "default"];
 	oggEncoders: string[] = ["libvorbis"];
 	overwrite: string = "question";
+	option: FfmpegOption;
 
-	constructor(ffmpegPath?: string) {
+	constructor(option: FfmpegOption = {}, ffmpegPath?: string) {
+		this.option = option;
 		if (ffmpegPath)
 			ffmpeg.setFfmpegPath(ffmpegPath);
 	}
@@ -38,13 +46,17 @@ class Complete {
 	}
 
 	convert(input: string, output: string, codec: string, cb: (err?: any) => void): void {
-		console.log("***", "convert", input, "to", output, "with", codec, "encoder", "***");
 		var converter = ffmpeg(input);
 		if (codec !== "default") {
 			converter = converter.addOption("-acodec " + codec);
 		} else {
 			converter = converter.addOption("-strict 2");
 		}
+
+		if (!!this.option.bitrate) converter = converter.addOption("-ab " + this.option.bitrate);
+		if (!!this.option.channels) converter = converter.addOption("-ac " + this.option.channels);
+		if (!!this.option.rate) converter = converter.addOption("-ar " + this.option.rate);
+
 		converter = converter.output(output)
 			.on("end", () => {
 				console.log("write " + output);
@@ -85,7 +97,9 @@ class Complete {
 							loop(index + 1);
 						} else {
 							if (path.extname(output) === ".ogg") {
-								console.log("Cannot covert Ogg vorbis without libvorbis. Compile your ffmpeg with '--enable_libvorbis' or reinstall ffmpeg with libborvis.");
+								console.log(
+									"Cannot covert Ogg vorbis without libvorbis. " +
+									"Compile your ffmpeg with '--enable_libvorbis' or reinstall ffmpeg with libborvis.");
 							}
 						}
 					}
@@ -137,5 +151,3 @@ class Complete {
 		}
 	}
 }
-
-export = Complete;
