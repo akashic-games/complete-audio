@@ -29,8 +29,7 @@ akashicコンテンツで使用する音声ファイル名を指定してくだ�
 $ complete-audio sound.wav
 ```
 
-Akashic Engineの詳細な利用方法については、 [公式ページ](https://akashic-games.github.io/) を参照してください。
-
+生成された音声ファイルの詳細な利用方法については、 [Akashic Engine 入門 (v2版) - 音を鳴らす](https://akashic-games.github.io/tutorial/v2/5-audio.html) を参照してください。
 
 ### FFmpegのライブラリについて
 
