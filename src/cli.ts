@@ -1,10 +1,11 @@
-
-var pkg = require("../package.json");
-var Complete = require("../lib/complete").Complete;
-var commander = require("commander");
+import * as fs from "fs";
+import * as path from "path";
+import * as commander from "commander";
+var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
+import { Complete } from "./complete";
 
 commander
-	.version(pkg.version)
+	.version(ver)
 	.usage("<filepath> <options>")
 	.option("-f, --force", "出力ファイルが既に存在する場合、上書きする")
 	.option("-i, --ignore", "出力ファイルが既に存在する場合、何もしない")
@@ -36,7 +37,7 @@ commander
 						process.exit(1);
 					}
 					if (index < commander.args.length - 1) {
-						setTimeout(function(){loop(index + 1)}, 0);
+						setTimeout(function(){loop(index + 1);}, 0);
 					} else {
 						console.log("done!");
 					}
