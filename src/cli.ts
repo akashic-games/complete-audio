@@ -20,14 +20,14 @@ commander
 			rate: commander["rate"]
 		};
 
-		var complete = new Complete(options, commander.ffmpeg);
-		if (commander.force && commander.ignore) {
+		var complete = new Complete(options, commander["ffmpeg"]);
+		if (commander["force"] && commander["ignore"]) {
 			console.log("You can not provide force and ignore at the same time");
 			process.exit(1);
 		} else {
-			if (commander.force)
+			if (commander["force"])
 				complete.overwrite = "force";
-			if (commander.ignore)
+			if (commander["ignore"])
 				complete.overwrite = "ignore";
 			var loop = function(index: number) {
 				var filepath = commander.args[index];
