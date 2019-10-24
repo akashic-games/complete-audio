@@ -14,6 +14,6 @@
     "node_modules/typescript/lib/lib.es6.d.ts",
     "./typings/fluent-ffmpeg.d.ts",
     "./typings/index.d.ts",
-    "src/complete.ts"
+    "src/cli.ts"
   ]
 }
