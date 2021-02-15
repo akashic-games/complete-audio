@@ -1,19 +1,16 @@
 {
   "compilerOptions": {
     "target": "ES5",
-    "noLib": true,
+    "lib": ["es5"],
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "./lib",
     "types": ["node"]
   },
   "filesGlob": [
-    "./typings/**/*.ts",
     "./src/**/*.ts"
   ],
   "files": [
-    "node_modules/typescript/lib/lib.es6.d.ts",
-    "./typings/fluent-ffmpeg.d.ts",
     "src/cli.ts"
   ]
 }
