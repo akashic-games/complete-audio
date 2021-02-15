@@ -14,23 +14,23 @@ commander
 	.option("-c, --channels <channels>", "出力する音声のチャンネル数。FFmpegの-acオプションに相当")
 	.option("-r, --rate <rate>", "出力する音声のサンプリングレート。FFmpegの-arオプションに相当");
 
-function cli() {
+function cli(): void {
 	var options = {
-		bitrate: commander["bitrate"],
-		channels: commander["channels"],
-		rate: commander["rate"]
+		bitrate: commander.bitrate,
+		channels: commander.channels,
+		rate: commander.rate
 	};
 
-	var complete = new Complete(options, commander["ffmpeg"]);
-	if (commander["force"] && commander["ignore"]) {
+	var complete = new Complete(options, commander.ffmpeg);
+	if (commander.force && commander.ignore) {
 		console.log("You can not provide force and ignore at the same time");
 		process.exit(1);
 	} else {
-		if (commander["force"])
+		if (commander.force)
 			complete.overwrite = "force";
-		if (commander["ignore"])
+		if (commander.ignore)
 			complete.overwrite = "ignore";
-		var loop = function(index: number) {
+		var loop = function(index: number): void {
 			var filepath = commander.args[index];
 			complete.auto(filepath, function(err: any) {
 				if (err) {
@@ -38,7 +38,9 @@ function cli() {
 					process.exit(1);
 				}
 				if (index < commander.args.length - 1) {
-					setTimeout(function(){loop(index + 1);}, 0);
+					setTimeout(function(){
+						loop(index + 1);
+					}, 0);
 				} else {
 					console.log("done!");
 					process.exit(0);
@@ -51,9 +53,9 @@ function cli() {
 }
 
 export function run(argv: string[]): void {
-    if (argv.length < 3) {
-        commander.help();
-        process.exit(1);
+	if (argv.length < 3) {
+		commander.help();
+		process.exit(1);
 	}
 	commander.parse(argv);
 	cli();

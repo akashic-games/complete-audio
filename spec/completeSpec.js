@@ -1,4 +1,4 @@
-var Complete = new require("../lib/complete").Complete;
+var Complete = require("../lib/complete").Complete;
 var fs = require("fs");
 var path = require("path");
 var ffmpeg = require("fluent-ffmpeg");
@@ -70,16 +70,12 @@ describe("complete", function() {
 			done();
 		};
 		complete.isAvailable = function(libName, cb) {
-			if (libName === "default") {
-				cb(true);
-			} else {
-				cb(false);
-			}
+			cb(true);
 		};
 		complete.convert = function(input, output, codec, cb) {
 			expect(input).toBe("foo.aac");
 			expect(output).toBe("foo.ogg");
-			expect(codec).toBe("default");
+			expect(codec).toBe("libvorbis");
 			cb();
 		};
 		complete.toOGG("foo.aac", exit);
@@ -95,6 +91,7 @@ describe("complete", function() {
 			expect(err).toBeUndefined();
 			done();
 		};
+		complete.isAvailable = function (_libName, cb) { cb(true) };
 		complete.convert = function(input, output, codec, cb) {
 			expect(convertedMap[output]).toBe(false);
 			convertedMap[output] = true;
@@ -117,6 +114,7 @@ describe("complete", function() {
 			expect(err).toBeUndefined();
 			done();
 		};
+		complete.isAvailable = function (_libName, cb) { cb(true) };
 		complete.convert = function(input, output, codec, cb) {
 			expect(convertedMap[output]).toBe(false);
 			convertedMap[output] = true;
@@ -161,8 +159,9 @@ describe("complete", function() {
 
 	it("auto error", function(done) {
 		var complete = new Complete();
-		complete.auto("foo.mp3", function(err) {
-			expect(err).toBe("ERR: foo.mp3 must be wav, aac, ogg or mp4.");
+		complete.isAvailable = function (_libName, cb) { cb(true) };
+		complete.auto("foo.zip", function(err) {
+			expect(err).toBe("ERR: foo.zip must be wav, aac, ogg or mp4.");
 			done();
 		});
 	});
