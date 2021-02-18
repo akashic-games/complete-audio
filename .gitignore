@@ -7,6 +7,3 @@ junitresults.xml
 lib
 tmp
 .idea
-typings/index.d.ts
-typings/globals/
-typings/modules/

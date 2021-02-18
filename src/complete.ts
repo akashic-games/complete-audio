@@ -1,7 +1,7 @@
 import fs = require("fs");
 import path = require("path");
-import ffmpeg = require("fluent-ffmpeg");
 import readline = require("readline");
+import ffmpeg = require("fluent-ffmpeg");
 
 export interface FfmpegOption {
 	bitrate?: string;
@@ -83,8 +83,8 @@ export class Complete {
 		}
 	}
 
-	selectEncoderAndConvert(encoders: string[], filepath: string, output: string, cb: (err?: any) => void) {
-		var loop = (index: number) => {
+	selectEncoderAndConvert(encoders: string[], filepath: string, output: string, cb: (err?: any) => void): void {
+		var loop = (index: number): void => {
 			var encoder = encoders[index];
 			this.isAvailable(encoder, (isAvailable: boolean, err?: any) => {
 				if (err) {
@@ -132,22 +132,22 @@ export class Complete {
 	auto(filepath: string, cb: (err?: any) => void): void {
 		var ext = path.extname(filepath);
 		switch (ext) {
-		case ".wav":
-			this.toOGGAndAAC(filepath, cb);
-			break;
-		case ".aac":
-			this.toOGG(filepath, cb);
-			break;
-		case ".ogg":
-			this.toAAC(filepath, cb);
-			break;
-		case ".mp4":
-		case ".mp3":
-			this.toOGGAndAAC(filepath, cb);
-			break;
-		default:
-			cb("ERR: " + filepath + " must be wav, aac, ogg or mp4.");
-			break;
+			case ".wav":
+				this.toOGGAndAAC(filepath, cb);
+				break;
+			case ".aac":
+				this.toOGG(filepath, cb);
+				break;
+			case ".ogg":
+				this.toAAC(filepath, cb);
+				break;
+			case ".mp4":
+			case ".mp3":
+				this.toOGGAndAAC(filepath, cb);
+				break;
+			default:
+				cb("ERR: " + filepath + " must be wav, aac, ogg or mp4.");
+				break;
 		}
 	}
 }
