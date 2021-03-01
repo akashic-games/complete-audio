@@ -4,7 +4,7 @@
   "description": "complement audio asset files",
   "main": "lib/complete.js",
   "scripts": {
-    "prepublish": "rimraf ./lib && npm run build",
+    "prepare": "rimraf ./lib && npm run build",
     "start": "npm run build && node bin/run",
     "build": "tsc -p ./",
     "lint": "npm run lint:ts && npm run lint:md",
