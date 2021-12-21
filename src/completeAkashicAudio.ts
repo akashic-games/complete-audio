@@ -7,9 +7,9 @@ export type OverwriteType = "force" | "question" | "ignore";
 export const BUILTIN_AAC_ENCODER = "<builtin-aac>";
 
 export interface FfmpegOption {
-  bitrate?: string;
-  channels?: string;
-  rate?: string;
+	bitrate?: string;
+	channels?: string;
+	rate?: string;
 }
 
 export interface ConvertParameterObject {
@@ -31,7 +31,7 @@ function convert(param: ConvertParameterObject): Promise<void> {
 			return;
 	}
 
-  const ffmpegCmd = ffmpeg(sourcePath);
+	const ffmpegCmd = ffmpeg(sourcePath);
 	if (ffmpegPath)
 		ffmpegCmd.setFfmpegPath(ffmpegPath);
 
@@ -65,25 +65,25 @@ function convert(param: ConvertParameterObject): Promise<void> {
 }
 
 export interface CompleteAkashicAudioParameterObject {
-  sourcePaths: string[];
-  overwrite: OverwriteType;
-  ffmpegPath?: string;
-  aacCodecNames?: string[];
-  oggCodecNames?: string[];
+	sourcePaths: string[];
+	overwrite: OverwriteType;
+	ffmpegPath?: string;
+	aacCodecNames?: string[];
+	oggCodecNames?: string[];
 	options?: FfmpegOption;
 }
 
 export async function completeAkashicAudio(param: CompleteAkashicAudioParameterObject): Promise<void> {
-  const {
-    sourcePaths,
-    overwrite,
-    ffmpegPath,
+	const {
+		sourcePaths,
+		overwrite,
+		ffmpegPath,
 		aacCodecNames = ["libfaac", "libvo_aacenc"],
 		oggCodecNames = ["libvorbis"],
 		options = {}
-  } = param;
+	} = param;
 
-  const availableCodecs = await getAvailableCodecs(ffmpegPath);
+	const availableCodecs = await getAvailableCodecs(ffmpegPath);
 	const aacCodecName = aacCodecNames.find(name => !!availableCodecs[name]) ?? BUILTIN_AAC_ENCODER;
 	const oggCodecName = oggCodecNames.find(name => !!availableCodecs[name]);
 	if (!oggCodecName) {
@@ -120,14 +120,14 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 }
 
 function getAvailableCodecs(ffmpegPath: string | undefined): Promise<ffmpeg.Codecs> {
-  return new Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		const ffmpegCmd = ffmpeg();
 		if (ffmpegPath)
 			ffmpegCmd.setFfmpegPath(ffmpegPath);
-    ffmpegCmd.getAvailableCodecs((err: any, codecs: ffmpeg.Codecs) => {
-      return err ? void reject(err) : resolve(codecs);
-    });
-  });
+		ffmpegCmd.getAvailableCodecs((err: any, codecs: ffmpeg.Codecs) => {
+			return err ? void reject(err) : resolve(codecs);
+		});
+	});
 }
 
 function askOverwrite(dest: string): Promise<boolean> {
