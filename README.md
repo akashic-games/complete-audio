@@ -6,12 +6,13 @@
 
 [Akashic Engine](https://akashic-games.github.io/) のゲームに必要な音声ファイルの形式を取り揃えるための変換ツールです。
 
-* wavファイルをoggファイルとaacファイルに変換
-* mp4ファイルをoggファイルとaacファイルに変換
-* mp3ファイルをoggファイルとaacファイルに変換
-* oggファイルとaacファイルを相互に変換
+以下の音声ファイルから、Akashic ゲームで使う .ogg, .aac ファイル (のうち足りないもの) を生成します。
 
-以上の機能を実装しています。
+- WAV ファイル (.wav)
+- Ogg Vorvis ファイル (.ogg)
+- AAC ファイル (.aac)
+- MP3 ファイル (.mp3)
+- AAC を格納した MP4 ファイル (.mp4, .m4a)
 
 ## インストール方法
 
