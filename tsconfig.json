@@ -5,11 +5,9 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "./lib",
-    "types": ["node"]
+    "types": ["node", "jest"],
+    "esModuleInterop": true
   },
-  "filesGlob": [
-    "./src/**/*.ts"
-  ],
   "files": [
     "src/cli.ts"
   ]

@@ -1,7 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as commander from "commander";
+import { Command } from "commander";
 import { completeAkashicAudio } from "./completeAkashicAudio";
+
+const commander = new Command();
 
 var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 commander
@@ -15,7 +17,7 @@ commander
 	.option("-r, --rate <rate>", "出力する音声のサンプリングレート。FFmpegの-arオプションに相当");
 
 async function cli(): Promise<void> {
-	const { force, ignore, ffmpeg, bitrate, channels, rate } = commander;
+	const { force, ignore, ffmpeg, bitrate, channels, rate } = commander as any;
 	if (force && ignore) {
 		console.log("You can not provide force and ignore at the same time");
 		process.exit(1);
@@ -33,7 +35,6 @@ async function cli(): Promise<void> {
 export function run(argv: string[]): void {
 	if (argv.length < 3) {
 		commander.help();
-		process.exit(1);
 	}
 	commander.parse(argv);
 	cli();
