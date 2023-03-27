@@ -3,12 +3,12 @@ import ffmpeg from "fluent-ffmpeg";
 var  { completeAkashicAudio } = require("../lib/completeAkashicAudio");
 
 describe("ffmpeg", () => {
-	it("sourcePath", (done) => {
+	it("sourcePath", () => {
 		const ffmpegPath = "/hoge/fuga/bin/ffmpeg";
+		const receivedFfmpegPath: string[] = [];
 		(ffmpeg as any).mockReturnValue({
 			setFfmpegPath: (path: string) => {
-				expect(path).toBe(ffmpegPath);
-				done();
+				receivedFfmpegPath.push(path);
 			},
 			getAvailableCodecs: () => {}
 		});
@@ -17,6 +17,7 @@ describe("ffmpeg", () => {
 			overwrite: "force",
 			ffmpegPath
 		});
+		expect(receivedFfmpegPath).toEqual([ffmpegPath]);
 	});
 });
 
@@ -58,29 +59,37 @@ describe("FfmpegCommand", () => {
 		});
 
 		it("OGGtoAAC", async () => {
+			const receivedOutputs: string[] = [];
+			const receivedOptions: string[] = [];
 			expectFuncs.output = (destPath: string) => {
-				expect(destPath).toEqual("foo.aac");
+				receivedOutputs.push(destPath);
 			};
 			expectFuncs.addOption = (options: string) => {
-				expect(["-strict 2", "-acodec libvorbis"].includes(options)).toBe(true);
+				receivedOptions.push(options);
 			}
 			await completeAkashicAudio({
 				sourcePaths: ["foo.ogg"],
 				overwrite: "force"
 			});
+			expect(receivedOutputs).toEqual(["foo.aac"]);
+			expect(receivedOptions).toEqual(["-strict 2"]);
 		});
 
 		it("AACToOGG", async () => {
+			const receivedOutputs: string[] = [];
+			const receivedOptions: string[] = [];
 			expectFuncs.output = (destPath: string) => {
-				expect(destPath).toEqual("foo.ogg");
+				receivedOutputs.push(destPath);
 			};
 			expectFuncs.addOption = (options: string) => {
-				expect(["-strict 2", "-acodec libvorbis"].includes(options)).toBe(true);
+				receivedOptions.push(options);
 			}
 			await completeAkashicAudio({
 				sourcePaths: ["foo.aac"],
 				overwrite: "force"
 			});
+			expect(receivedOutputs).toEqual(["foo.ogg"]);
+			expect(receivedOptions).toEqual(["-acodec libvorbis"]);
 		});
 		it("toOGGAndAAC", async () => {
 			const receivedOutputs: string[] = [];

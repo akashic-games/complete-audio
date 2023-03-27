@@ -12,16 +12,6 @@ export interface FfmpegOption {
 	rate?: string;
 }
 
-export interface ConvertParameterObject {
-	sourcePath: string;
-	destPath: string;
-	/// 利用するコーデック名、または組み込みのAACエンコーダを使うための `"<builtin-aac>"`
-	codecName: string;
-	overwrite: OverwriteType;
-	options: FfmpegOption;
-	ffmpegPath?: string;
-}
-
 export interface CompleteAkashicAudioParameterObject {
 	sourcePaths: string[];
 	overwrite: OverwriteType;
@@ -75,6 +65,16 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 			await convert({ sourcePath, destPath, codecName: oggCodecName, overwrite, options, ffmpegPath });
 		}
 	}
+}
+
+interface ConvertParameterObject {
+	sourcePath: string;
+	destPath: string;
+	/// 利用するコーデック名、または組み込みのAACエンコーダを使うための `"<builtin-aac>"`
+	codecName: string;
+	overwrite: OverwriteType;
+	options: FfmpegOption;
+	ffmpegPath?: string;
 }
 
 function convert(param: ConvertParameterObject): Promise<void> {
