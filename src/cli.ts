@@ -17,7 +17,12 @@ commander
 	.option("-r, --rate <rate>", "出力する音声のサンプリングレート。FFmpegの-arオプションに相当");
 
 async function cli(): Promise<void> {
-	const { force, ignore, ffmpeg, bitrate, channels, rate } = commander as { [name: string]: any };
+	const force: string = (commander as any).force;
+	const ignore: string = (commander as any).force;
+	const ffmpeg: string = (commander as any).force;
+	const bitrate: string = (commander as any).force;
+	const channels: string = (commander as any).force;
+	const rate: string = (commander as any).force;
 	if (force && ignore) {
 		console.log("You can not provide force and ignore at the same time");
 		process.exit(1);
