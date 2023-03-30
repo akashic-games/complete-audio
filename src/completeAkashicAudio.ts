@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as readline from "readline";
-import * as ffmpeg from "fluent-ffmpeg";
+import ffmpeg from "fluent-ffmpeg";
 
 export type OverwriteType = "force" | "question" | "ignore";
 export const BUILTIN_AAC_ENCODER = "<builtin-aac>";
@@ -10,58 +10,6 @@ export interface FfmpegOption {
 	bitrate?: string;
 	channels?: string;
 	rate?: string;
-}
-
-export interface ConvertParameterObject {
-	sourcePath: string;
-	destPath: string;
-	/// 利用するコーデック名、または組み込みのAACエンコーダを使うための `"<builtin-aac>"`
-	codecName: string;
-	overwrite: OverwriteType;
-	options: FfmpegOption;
-	ffmpegPath?: string;
-}
-
-function convert(param: ConvertParameterObject): Promise<void> {
-	const { sourcePath, destPath, codecName, overwrite, options, ffmpegPath } = param;
-
-	// 上書きチェック
-	if (overwrite !== "force" && fs.existsSync(destPath)) {
-		if (overwrite === "ignore" || (overwrite === "question" && !askOverwrite(destPath)))
-			return;
-	}
-
-	const ffmpegCmd = ffmpeg(sourcePath);
-	if (ffmpegPath)
-		ffmpegCmd.setFfmpegPath(ffmpegPath);
-
-	if (codecName !== BUILTIN_AAC_ENCODER)
-		ffmpegCmd.addOption("-acodec " + codecName);
-
-	// TODO 必要性確認 (2015-12-05 までビルトインの AAC エンコードに -strict -2 が必要だった名残？ (のしかも値がおかしいもの？))
-	// ref. https://trac.ffmpeg.org/wiki/Encode/AAC?action=diff&version=40&old_version=39
-	if (codecName === BUILTIN_AAC_ENCODER)
-		ffmpegCmd.addOption("-strict 2");
-
-	if (!!options.bitrate)
-		ffmpegCmd.addOption("-ab " + options.bitrate);
-	if (!!options.channels)
-		ffmpegCmd.addOption("-ac " + options.channels);
-	if (!!options.rate)
-		ffmpegCmd.addOption("-ar " + options.rate);
-
-	return new Promise((resolve, reject) => {
-		ffmpegCmd.output(destPath)
-			.on("end", () => {
-				console.log("write " + destPath);
-				resolve();
-			})
-			.on("error", (err: any, stdout: string, stderr: string) => {
-				// TODO error を投げるようにする
-				reject("ffmpeg stdout:\n" + stdout + "\nffmpeg stderr:\n" + stderr + "\n" + err);
-			});
-		ffmpegCmd.run();
-	});
 }
 
 export interface CompleteAkashicAudioParameterObject {
@@ -117,6 +65,58 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 			await convert({ sourcePath, destPath, codecName: oggCodecName, overwrite, options, ffmpegPath });
 		}
 	}
+}
+
+interface ConvertParameterObject {
+	sourcePath: string;
+	destPath: string;
+	/// 利用するコーデック名、または組み込みのAACエンコーダを使うための `"<builtin-aac>"`
+	codecName: string;
+	overwrite: OverwriteType;
+	options: FfmpegOption;
+	ffmpegPath?: string;
+}
+
+function convert(param: ConvertParameterObject): Promise<void> {
+	const { sourcePath, destPath, codecName, overwrite, options, ffmpegPath } = param;
+
+	// 上書きチェック
+	if (overwrite !== "force" && fs.existsSync(destPath)) {
+		if (overwrite === "ignore" || (overwrite === "question" && !askOverwrite(destPath)))
+			return;
+	}
+
+	const ffmpegCmd = ffmpeg(sourcePath);
+	if (ffmpegPath)
+		ffmpegCmd.setFfmpegPath(ffmpegPath);
+
+	if (codecName !== BUILTIN_AAC_ENCODER)
+		ffmpegCmd.addOption("-acodec " + codecName);
+
+	// TODO 必要性確認 (2015-12-05 までビルトインの AAC エンコードに -strict -2 が必要だった名残？ (のしかも値がおかしいもの？))
+	// ref. https://trac.ffmpeg.org/wiki/Encode/AAC?action=diff&version=40&old_version=39
+	if (codecName === BUILTIN_AAC_ENCODER)
+		ffmpegCmd.addOption("-strict 2");
+
+	if (!!options.bitrate)
+		ffmpegCmd.addOption("-ab " + options.bitrate);
+	if (!!options.channels)
+		ffmpegCmd.addOption("-ac " + options.channels);
+	if (!!options.rate)
+		ffmpegCmd.addOption("-ar " + options.rate);
+
+	return new Promise((resolve, reject) => {
+		ffmpegCmd.output(destPath)
+			.on("end", () => {
+				console.log("write " + destPath);
+				resolve();
+			})
+			.on("error", (err: any, stdout: string, stderr: string) => {
+				// TODO error を投げるようにする
+				reject("ffmpeg stdout:\n" + stdout + "\nffmpeg stderr:\n" + stderr + "\n" + err);
+			});
+		ffmpegCmd.run();
+	});
 }
 
 function getAvailableCodecs(ffmpegPath: string | undefined): Promise<ffmpeg.Codecs> {
