@@ -14,15 +14,18 @@ commander
 	.option("--ffmpeg <path>", "ffmpegのバイナリのフルパスを直接指定する場合に使うオプション")
 	.option("-b, --bitrate <bitrate>", "出力する音声のビットレート。FFmpegの-abオプションに相当（experimental）")
 	.option("-c, --channels <channels>", "出力する音声のチャンネル数。FFmpegの-acオプションに相当")
-	.option("-r, --rate <rate>", "出力する音声のサンプリングレート。FFmpegの-arオプションに相当");
+	.option("-r, --rate <rate>", "出力する音声のサンプリングレート。FFmpegの-arオプションに相当")
+	.option("--experimental-m4a", "aacファイルのかわりにm4aファイルを出力する");
 
 async function cli(): Promise<void> {
-	const force: string = (commander as any).force;
-	const ignore: string = (commander as any).force;
-	const ffmpeg: string = (commander as any).force;
-	const bitrate: string = (commander as any).force;
-	const channels: string = (commander as any).force;
-	const rate: string = (commander as any).force;
+	const options = commander.opts();
+	const force: string = options.force;
+	const ignore: string = options.ignore;
+	const ffmpeg: string = options.ffmpeg;
+	const bitrate: string = options.bitrate;
+	const channels: string = options.channels;
+	const rate: string = options.rate;
+	const m4a = options.experimentalM4a;
 	if (force && ignore) {
 		console.log("You can not provide force and ignore at the same time");
 		process.exit(1);
@@ -31,6 +34,7 @@ async function cli(): Promise<void> {
 		sourcePaths: commander.args,
 		overwrite: force ? "force" : (ignore ? "ignore" : "question"),
 		ffmpegPath: ffmpeg,
+		useM4a: m4a,
 		options: { bitrate, channels, rate }
 	});
 	console.log("done!");

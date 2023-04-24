@@ -18,6 +18,7 @@ export interface CompleteAkashicAudioParameterObject {
 	ffmpegPath?: string;
 	aacCodecNames?: string[];
 	oggCodecNames?: string[];
+	useM4a?: boolean;
 	options?: FfmpegOption;
 }
 
@@ -28,7 +29,8 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 		ffmpegPath,
 		aacCodecNames = ["libfaac", "libvo_aacenc"],
 		oggCodecNames = ["libvorbis"],
-		options = {}
+		options = {},
+		useM4a,
 	} = param;
 
 	const availableCodecs = await getAvailableCodecs(ffmpegPath);
@@ -56,8 +58,9 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 			);
 		}
 
-		if (srcExt !== ".aac") {
-			const destPath = path.basename(sourcePath, srcExt) + ".aac";
+		const ext = useM4a ? ".m4a" : ".aac";
+		if (srcExt !== ext) {
+			const destPath = path.basename(sourcePath, srcExt) + ext;
 			await convert({ sourcePath, destPath, codecName: aacCodecName, overwrite, options, ffmpegPath });
 		}
 		if (srcExt !== ".ogg") {
