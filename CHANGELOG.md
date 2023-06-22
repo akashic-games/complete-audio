@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.3.0-beta.0
+## 0.3.0
 * `--output-experimental-m4a` オプションを追加
 * コード全体をリライト
 
