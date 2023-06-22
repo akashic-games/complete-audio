@@ -1,6 +1,6 @@
 {
   "name": "@akashic/complete-audio",
-  "version": "0.2.5",
+  "version": "0.3.0-beta.0",
   "description": "complement audio asset files",
   "main": "lib/complete.js",
   "scripts": {

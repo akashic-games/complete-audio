@@ -8,11 +8,11 @@
 
 以下の音声ファイルから、Akashic ゲームで使う .ogg, .aac ファイル (のうち足りないもの) を生成します。
 
-- WAV ファイル (.wav)
-- Ogg Vorvis ファイル (.ogg)
-- AAC ファイル (.aac)
-- MP3 ファイル (.mp3)
-- AAC を格納した MP4 ファイル (.mp4, .m4a)
+* WAV ファイル (.wav)
+* Ogg Vorvis ファイル (.ogg)
+* AAC ファイル (.aac)
+* MP3 ファイル (.mp3)
+* AAC を格納した MP4 ファイル (.mp4, .m4a)
 
 ## インストール方法
 
