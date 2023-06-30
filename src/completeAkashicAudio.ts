@@ -51,7 +51,7 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 		const srcExt = path.extname(sourcePath);
 		if (srcExt === "")
 			throw new Error(`The input ${sourcePath} must have a file extension`);
-		if (/^\.(wav|ogg|aac|mp3|mp4|m4a)$/.test(srcExt)) {
+		if (!/^\.(wav|ogg|aac|mp3|mp4|m4a)$/.test(srcExt)) {
 			console.warn(
 				`Unknown file type: ${srcExt}. ` +
 				"complete-audio does not officially support this type and may cause error."
