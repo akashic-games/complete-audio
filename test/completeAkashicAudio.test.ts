@@ -75,6 +75,24 @@ describe("FfmpegCommand", () => {
 			expect(receivedOptions).toEqual(["-strict 2"]);
 		});
 
+		it("OGGtoM4A", async () => {
+			const receivedOutputs: string[] = [];
+			const receivedOptions: string[] = [];
+			expectFuncs.output = (destPath: string) => {
+				receivedOutputs.push(destPath);
+			};
+			expectFuncs.addOption = (options: string) => {
+				receivedOptions.push(options);
+			}
+			await completeAkashicAudio({
+				sourcePaths: ["foo.ogg"],
+				overwrite: "force",
+				outputM4a: true
+			});
+			expect(receivedOutputs).toEqual(["foo.m4a"]);
+			expect(receivedOptions).toEqual(["-strict 2"]);
+		});
+
 		it("AACToOGG", async () => {
 			const receivedOutputs: string[] = [];
 			const receivedOptions: string[] = [];
@@ -91,6 +109,7 @@ describe("FfmpegCommand", () => {
 			expect(receivedOutputs).toEqual(["foo.ogg"]);
 			expect(receivedOptions).toEqual(["-acodec libvorbis"]);
 		});
+
 		it("toOGGAndAAC", async () => {
 			const receivedOutputs: string[] = [];
 			const receivedOptions: string[] = [];
@@ -107,5 +126,24 @@ describe("FfmpegCommand", () => {
 			expect(receivedOutputs).toEqual(["foo.aac", "foo.ogg"]);
 			expect(receivedOptions).toEqual(["-strict 2", "-acodec libvorbis"]);
 		});
+
+		it("toOGGAndM4A", async () => {
+			const receivedOutputs: string[] = [];
+			const receivedOptions: string[] = [];
+			expectFuncs.output = (destPath: string) => {
+				receivedOutputs.push(destPath);
+			};
+			expectFuncs.addOption = (options: string) => {
+				receivedOptions.push(options);
+			}
+			await completeAkashicAudio({
+				sourcePaths: ["foo.wav"],
+				overwrite: "force",
+				outputM4a: true
+			});
+			expect(receivedOutputs).toEqual(["foo.m4a", "foo.ogg"]);
+			expect(receivedOptions).toEqual(["-strict 2", "-acodec libvorbis"]);
+		});
+
 	});
 });
