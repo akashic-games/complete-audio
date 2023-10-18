@@ -22,42 +22,42 @@ describe("ffmpeg", () => {
 });
 
 describe("FfmpegCommand", () => {
-	describe("convert", () => {
-		let ffmpegMockImpl: any;
-		let expectFuncs: any = {};
-		beforeEach(function() {
-			ffmpegMockImpl = {
-				getAvailableCodecs: (cb: any) => {
-					cb(undefined, {
-						libvorbis: {
-							type: 'audio',
-							description: 'Vorbis (decoders: vorbis libvorbis ) (encoders: vorbis libvorbis )',
-							intraFrameOnly: true,
-							isLossy: true,
-							isLossless: false,
-							canEncode: true,
-							canDecode: true
-						  }
-					});
-				},
-				output: (destPath: string) => {
-					if (expectFuncs.output) expectFuncs.output(destPath);
-					return ffmpegMockImpl;
-				},
-				addOption: (options: string[]) => {
-					if (expectFuncs.addOption) expectFuncs.addOption(options);
-				},
-				on: (event: string, cb: any) => {
-					cb();
-					return ffmpegMockImpl;
-				}
-			};
-			(ffmpeg as any).mockReturnValue(ffmpegMockImpl);
-		});
-		afterEach(function() {
-			expectFuncs = {};
-		});
+	let ffmpegMockImpl: any;
+	let expectFuncs: any = {};
+	beforeEach(function() {
+		ffmpegMockImpl = {
+			getAvailableCodecs: (cb: any) => {
+				cb(undefined, {
+					libvorbis: {
+						type: 'audio',
+						description: 'Vorbis (decoders: vorbis libvorbis ) (encoders: vorbis libvorbis )',
+						intraFrameOnly: true,
+						isLossy: true,
+						isLossless: false,
+						canEncode: true,
+						canDecode: true
+					  }
+				});
+			},
+			output: (destPath: string) => {
+				if (expectFuncs.output) expectFuncs.output(destPath);
+				return ffmpegMockImpl;
+			},
+			addOption: (options: string[]) => {
+				if (expectFuncs.addOption) expectFuncs.addOption(options);
+			},
+			on: (event: string, cb: any) => {
+				cb();
+				return ffmpegMockImpl;
+			}
+		};
+		(ffmpeg as any).mockReturnValue(ffmpegMockImpl);
+	});
+	afterEach(function() {
+		expectFuncs = {};
+	});
 
+	describe("convert", () => {
 		it("OGGtoAAC", async () => {
 			const receivedOutputs: string[] = [];
 			const receivedOptions: string[] = [];
@@ -145,5 +145,59 @@ describe("FfmpegCommand", () => {
 			expect(receivedOptions).toEqual(["-strict 2", "-acodec libvorbis"]);
 		});
 
+	});
+
+	describe("output option", () => {
+		it ("no output option", async() => { 
+			const receivedOutputs: string[] = [];
+			expectFuncs.output = (destPath: string) => {
+				receivedOutputs.push(destPath);
+			};
+			
+			await completeAkashicAudio({
+				sourcePaths: ["foo/foo1.ogg","foo/foo2.ogg", "hoge/hoge.ogg"],
+				overwrite: "force",
+				outputM4a: true
+			});
+			expect(receivedOutputs).toEqual(["foo/foo1.m4a", "foo/foo2.m4a", "hoge/hoge.m4a"]);
+		});
+
+		it ("specify file path", async() => { 
+			const receivedOutputs: string[] = [];
+			expectFuncs.output = (destPath: string) => {
+				receivedOutputs.push(destPath);
+			};
+			await completeAkashicAudio({
+				sourcePaths: ["foo.ogg"],
+				outputPath: "./hogeDir/hoge.m4a",
+				overwrite: "force",
+				outputM4a: true
+			});
+			expect(receivedOutputs).toEqual(["./hogeDir/hoge.m4a"]);
+		});
+
+		it ("specify directory path", async() => { 
+			let receivedOutputs: string[] = [];
+			expectFuncs.output = (destPath: string) => {
+				receivedOutputs.push(destPath);
+			};
+			await completeAkashicAudio({
+				sourcePaths: ["foo/foo1.ogg","foo/foo2.ogg", "hoge/hoge.ogg"],
+				outputPath: "audio/out",
+				overwrite: "force",
+				outputM4a: true
+			});
+			expect(receivedOutputs).toEqual(["audio/out/foo1.m4a", "audio/out/foo2.m4a", "audio/out/hoge.m4a"]);
+
+			receivedOutputs = [];
+			await completeAkashicAudio({
+				sourcePaths: ["foo/foo1.ogg", "hoge/hoge.ogg"],
+				outputPath: ".",
+				overwrite: "force",
+				outputM4a: true
+			});
+			expect(receivedOutputs).toEqual(["foo1.m4a", "hoge.m4a"]);
+
+		});
 	});
 });
