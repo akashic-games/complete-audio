@@ -14,6 +14,7 @@ export interface FfmpegOption {
 
 export interface CompleteAkashicAudioParameterObject {
 	sourcePaths: string[];
+	outputPath: string;
 	overwrite: OverwriteType;
 	ffmpegPath?: string;
 	aacCodecNames?: string[];
@@ -25,6 +26,7 @@ export interface CompleteAkashicAudioParameterObject {
 export async function completeAkashicAudio(param: CompleteAkashicAudioParameterObject): Promise<void> {
 	const {
 		sourcePaths,
+		outputPath,
 		overwrite,
 		ffmpegPath,
 		aacCodecNames = ["libfaac", "libvo_aacenc"],
@@ -32,6 +34,14 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 		options = {},
 		outputM4a,
 	} = param;
+
+	const isOutputPathDir = outputPath && path.extname(outputPath) === "";
+	if (outputPath) {
+		const outDir = isOutputPathDir ? outputPath : path.dirname(outputPath);
+		if (!fs.existsSync(outDir)) {
+			fs.mkdirSync(outDir, { recursive: true });
+		}
+	}
 
 	const availableCodecs = await getAvailableCodecs(ffmpegPath);
 	const aacCodecName = aacCodecNames.find(name => !!availableCodecs[name]) ?? BUILTIN_AAC_ENCODER;
@@ -59,12 +69,15 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 		}
 
 		const ext = outputM4a ? ".m4a" : ".aac";
+		const srcDirPath = path.dirname(sourcePath);
 		if (srcExt !== ext) {
-			const destPath = path.basename(sourcePath, srcExt) + ext;
+			const fileName = path.basename(sourcePath, srcExt) + ext;
+			const destPath = makeDestPath(srcDirPath, fileName, outputPath, isOutputPathDir);
 			await convert({ sourcePath, destPath, codecName: aacCodecName, overwrite, options, ffmpegPath });
 		}
 		if (srcExt !== ".ogg") {
-			const destPath = path.basename(sourcePath, srcExt) + ".ogg";
+			const fileName = path.basename(sourcePath, srcExt) + ".ogg";
+			const destPath = makeDestPath(srcDirPath, fileName, outputPath, isOutputPathDir);
 			await convert({ sourcePath, destPath, codecName: oggCodecName, overwrite, options, ffmpegPath });
 		}
 	}
@@ -141,4 +154,11 @@ function askOverwrite(dest: string): Promise<boolean> {
 			resolve(value === "y");
 		});
 	});
+}
+
+function makeDestPath(srcDirPath: string, fileName: string, outputPath: string, isOutPathDir: boolean): string {
+	if (outputPath && !isOutPathDir) return outputPath;
+
+	const destDir = outputPath || srcDirPath;
+	return path.join(destDir, fileName);
 }
