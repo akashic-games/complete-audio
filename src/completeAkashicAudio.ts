@@ -35,9 +35,9 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 		outputM4a,
 	} = param;
 
-	const isOutputPathDir = outputPath && path.extname(outputPath) === "";
+	const isOutputDirPath = outputPath && path.extname(outputPath) === "";
 	if (outputPath) {
-		const outDir = isOutputPathDir ? outputPath : path.dirname(outputPath);
+		const outDir = isOutputDirPath ? outputPath : path.dirname(outputPath);
 		if (!fs.existsSync(outDir)) {
 			fs.mkdirSync(outDir, { recursive: true });
 		}
@@ -72,12 +72,12 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 		const srcDirPath = path.dirname(sourcePath);
 		if (srcExt !== ext) {
 			const fileName = path.basename(sourcePath, srcExt) + ext;
-			const destPath = makeDestPath(srcDirPath, fileName, outputPath, isOutputPathDir);
+			const destPath = makeDestPath(srcDirPath, fileName, outputPath, isOutputDirPath);
 			await convert({ sourcePath, destPath, codecName: aacCodecName, overwrite, options, ffmpegPath });
 		}
 		if (srcExt !== ".ogg") {
 			const fileName = path.basename(sourcePath, srcExt) + ".ogg";
-			const destPath = makeDestPath(srcDirPath, fileName, outputPath, isOutputPathDir);
+			const destPath = makeDestPath(srcDirPath, fileName, outputPath, isOutputDirPath);
 			await convert({ sourcePath, destPath, codecName: oggCodecName, overwrite, options, ffmpegPath });
 		}
 	}
@@ -156,8 +156,8 @@ function askOverwrite(dest: string): Promise<boolean> {
 	});
 }
 
-function makeDestPath(srcDirPath: string, fileName: string, outputPath: string, isOutPathDir: boolean): string {
-	if (outputPath && !isOutPathDir) return outputPath;
+function makeDestPath(srcDirPath: string, fileName: string, outputPath: string, isOutputDirPath: boolean): string {
+	if (outputPath && !isOutputDirPath) return outputPath;
 
 	const destDir = outputPath || srcDirPath;
 	return path.join(destDir, fileName);
