@@ -14,7 +14,7 @@ export interface FfmpegOption {
 
 export interface CompleteAkashicAudioParameterObject {
 	sourcePaths: string[];
-	outputPath: string;
+	outputPath: string | undefined;
 	overwrite: OverwriteType;
 	ffmpegPath?: string;
 	aacCodecNames?: string[];
@@ -35,7 +35,7 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 		outputM4a,
 	} = param;
 
-	const isOutputDirPath = outputPath && path.extname(outputPath) === "";
+	const isOutputDirPath = outputPath ? path.extname(outputPath) === "" : undefined;
 	if (outputPath) {
 		const outDir = isOutputDirPath ? outputPath : path.dirname(outputPath);
 		if (!fs.existsSync(outDir)) {
@@ -156,7 +156,7 @@ function askOverwrite(dest: string): Promise<boolean> {
 	});
 }
 
-function makeDestPath(srcDirPath: string, fileName: string, outputPath: string, isOutputDirPath: boolean): string {
+function makeDestPath(srcDirPath: string, fileName: string, outputPath: string | undefined, isOutputDirPath: boolean | undefined): string {
 	if (outputPath && !isOutputDirPath) return outputPath;
 
 	const destDir = outputPath || srcDirPath;
