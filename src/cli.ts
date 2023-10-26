@@ -9,7 +9,7 @@ var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json
 commander
 	.version(ver)
 	.usage("<filepath> <options>")
-	.option("-o, --output <path>", "出力先を指定する")
+	.option("-o, --output <path>", "出力先ディレクトリ指定する")
 	.option("-f, --force", "出力ファイルが既に存在する場合、上書きする")
 	.option("-i, --ignore", "出力ファイルが既に存在する場合、何もしない")
 	.option("--ffmpeg <path>", "ffmpegのバイナリのフルパスを直接指定する場合に使うオプション")
