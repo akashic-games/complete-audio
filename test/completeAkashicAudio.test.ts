@@ -163,17 +163,16 @@ describe("FfmpegCommand", () => {
 		});
 
 		it ("specify file path", async() => { 
-			const receivedOutputs: string[] = [];
-			expectFuncs.output = (destPath: string) => {
-				receivedOutputs.push(destPath);
-			};
-			await completeAkashicAudio({
-				sourcePaths: ["foo.ogg"],
-				outputPath: "./hogeDir/hoge.m4a",
-				overwrite: "force",
-				outputM4a: true
-			});
-			expect(receivedOutputs).toEqual(["./hogeDir/hoge.m4a"]);
+			try { 
+				await completeAkashicAudio({
+					sourcePaths: ["foo.ogg"],
+					outputPath: "./hogeDir/hoge.m4a",
+					overwrite: "force",
+					outputM4a: true
+				});
+			} catch (e) {
+				expect(e.message).toBe("Invalid -o option value, Please specify the directory path.")
+			}
 		});
 
 		it ("specify directory path", async() => { 
