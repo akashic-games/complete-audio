@@ -9,6 +9,7 @@ var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json
 commander
 	.version(ver)
 	.usage("<filepath> <options>")
+	.option("-o, --output <path>", "出力先ディレクトリを指定する。省略時は <filepath> と同じディレクトリに出力")
 	.option("-f, --force", "出力ファイルが既に存在する場合、上書きする")
 	.option("-i, --ignore", "出力ファイルが既に存在する場合、何もしない")
 	.option("--ffmpeg <path>", "ffmpegのバイナリのフルパスを直接指定する場合に使うオプション")
@@ -20,6 +21,7 @@ commander
 
 async function cli(): Promise<void> {
 	const options = commander.opts();
+	const output: string = options.output;
 	const force: string = options.force;
 	const ignore: string = options.ignore;
 	const ffmpeg: string = options.ffmpeg;
@@ -33,6 +35,7 @@ async function cli(): Promise<void> {
 	}
 	await completeAkashicAudio({
 		sourcePaths: commander.args,
+		outputPath: output,
 		overwrite: force ? "force" : (ignore ? "ignore" : "question"),
 		ffmpegPath: ffmpeg,
 		outputM4a: !outputAac,

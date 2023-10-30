@@ -14,6 +14,7 @@ export interface FfmpegOption {
 
 export interface CompleteAkashicAudioParameterObject {
 	sourcePaths: string[];
+	outputPath: string | undefined;
 	overwrite: OverwriteType;
 	ffmpegPath?: string;
 	aacCodecNames?: string[];
@@ -25,6 +26,7 @@ export interface CompleteAkashicAudioParameterObject {
 export async function completeAkashicAudio(param: CompleteAkashicAudioParameterObject): Promise<void> {
 	const {
 		sourcePaths,
+		outputPath,
 		overwrite,
 		ffmpegPath,
 		aacCodecNames = ["libfaac", "libvo_aacenc"],
@@ -32,6 +34,13 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 		options = {},
 		outputM4a,
 	} = param;
+
+	if (outputPath) {
+		if (path.extname(outputPath) !== "" ) {
+			throw new Error("Invalid -o option value, Please specify the directory path.");
+		}
+		fs.mkdirSync(outputPath, { recursive: true });
+	}
 
 	const availableCodecs = await getAvailableCodecs(ffmpegPath);
 	const aacCodecName = aacCodecNames.find(name => !!availableCodecs[name]) ?? BUILTIN_AAC_ENCODER;
@@ -59,12 +68,15 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 		}
 
 		const ext = outputM4a ? ".m4a" : ".aac";
+		const destDir = outputPath || path.dirname(sourcePath);
 		if (srcExt !== ext) {
-			const destPath = path.basename(sourcePath, srcExt) + ext;
+			const fileName = path.basename(sourcePath, srcExt) + ext;
+			const destPath = path.join(destDir, fileName);
 			await convert({ sourcePath, destPath, codecName: aacCodecName, overwrite, options, ffmpegPath });
 		}
 		if (srcExt !== ".ogg") {
-			const destPath = path.basename(sourcePath, srcExt) + ".ogg";
+			const fileName = path.basename(sourcePath, srcExt) + ".ogg";
+			const destPath = path.join(destDir, fileName);
 			await convert({ sourcePath, destPath, codecName: oggCodecName, overwrite, options, ffmpegPath });
 		}
 	}
