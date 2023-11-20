@@ -102,6 +102,7 @@ function convert(param: ConvertParameterObject): Promise<void> {
 	}
 
 	const ffmpegCmd = ffmpeg(sourcePath);
+	ffmpegCmd.addOption("-map a");
 	if (ffmpegPath)
 		ffmpegCmd.setFfmpegPath(ffmpegPath);
 
