@@ -92,16 +92,17 @@ interface ConvertParameterObject {
 	ffmpegPath?: string;
 }
 
-function convert(param: ConvertParameterObject): Promise<void> {
+async function convert(param: ConvertParameterObject): Promise<void> {
 	const { sourcePath, destPath, codecName, overwrite, options, ffmpegPath } = param;
 
 	// 上書きチェック
 	if (overwrite !== "force" && fs.existsSync(destPath)) {
-		if (overwrite === "ignore" || (overwrite === "question" && !askOverwrite(destPath)))
+		if (overwrite === "ignore" || (overwrite === "question" && !(await askOverwrite(destPath))))
 			return;
 	}
 
 	const ffmpegCmd = ffmpeg(sourcePath);
+	ffmpegCmd.addOption("-map a");
 	if (ffmpegPath)
 		ffmpegCmd.setFfmpegPath(ffmpegPath);
 
