@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.1.0
+* Ogg Vorbisのphysical streamのシリアルナンバーを指定する `--ogg_serial` オプションを追加
+
 ## 2.0.1
 * カバー画像付きmp3を扱えない不具合を修正
 
