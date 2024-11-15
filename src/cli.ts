@@ -18,7 +18,7 @@ commander
 	.option("-r, --rate <rate>", "出力する音声のサンプリングレート。FFmpegの-arオプションに相当")
 	.option("--output-aac", "m4aファイルのかわりにaacファイルを出力する")
 	.option("--experimental-output-m4a", "非推奨 (現在はこの値に関わらずm4aを出力する)")
-	.option("--ogg-serial-offset <number>", "Oggのphysical streamのシリアルナンバーを指定する");
+	.option("--ogg-serial-offset <number>", "Oggのlogical bitstreamのシリアルナンバーを指定する");
 
 async function cli(): Promise<void> {
 	const options = commander.opts();
