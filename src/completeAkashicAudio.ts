@@ -6,10 +6,15 @@ import ffmpeg from "fluent-ffmpeg";
 export type OverwriteType = "force" | "question" | "ignore";
 export const BUILTIN_AAC_ENCODER = "<builtin-aac>";
 
+export interface OggOption {
+	serialOffset?: string;
+}
+
 export interface FfmpegOption {
 	bitrate?: string;
 	channels?: string;
 	rate?: string;
+	oggOption?: OggOption;
 }
 
 export interface CompleteAkashicAudioParameterObject {
@@ -45,6 +50,8 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 	const availableCodecs = await getAvailableCodecs(ffmpegPath);
 	const aacCodecName = aacCodecNames.find(name => !!availableCodecs[name]) ?? BUILTIN_AAC_ENCODER;
 	const oggCodecName = oggCodecNames.find(name => !!availableCodecs[name]);
+	const aacOptions: FfmpegOption = { ...options, oggOption: undefined };
+	const oggOptions: FfmpegOption = { ...options };
 	if (!oggCodecName) {
 		if (sourcePaths.some(p => path.extname(p) !== ".ogg")) {
 			throw new Error(
@@ -72,12 +79,12 @@ export async function completeAkashicAudio(param: CompleteAkashicAudioParameterO
 		if (srcExt !== ext) {
 			const fileName = path.basename(sourcePath, srcExt) + ext;
 			const destPath = path.join(destDir, fileName);
-			await convert({ sourcePath, destPath, codecName: aacCodecName, overwrite, options, ffmpegPath });
+			await convert({ sourcePath, destPath, codecName: aacCodecName, overwrite, options: aacOptions, ffmpegPath });
 		}
 		if (srcExt !== ".ogg") {
 			const fileName = path.basename(sourcePath, srcExt) + ".ogg";
 			const destPath = path.join(destDir, fileName);
-			await convert({ sourcePath, destPath, codecName: oggCodecName, overwrite, options, ffmpegPath });
+			await convert({ sourcePath, destPath, codecName: oggCodecName, overwrite, options: oggOptions, ffmpegPath });
 		}
 	}
 }
@@ -120,6 +127,10 @@ async function convert(param: ConvertParameterObject): Promise<void> {
 		ffmpegCmd.addOption("-ac " + options.channels);
 	if (!!options.rate)
 		ffmpegCmd.addOption("-ar " + options.rate);
+	if (!!options.oggOption?.serialOffset) {
+		ffmpegCmd.addOption("-bitexact");
+		ffmpegCmd.addOption("-serial_offset " + options.oggOption?.serialOffset);
+	}
 
 	return new Promise((resolve, reject) => {
 		ffmpegCmd.output(destPath)

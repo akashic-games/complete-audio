@@ -17,7 +17,8 @@ commander
 	.option("-c, --channels <channels>", "出力する音声のチャンネル数。FFmpegの-acオプションに相当")
 	.option("-r, --rate <rate>", "出力する音声のサンプリングレート。FFmpegの-arオプションに相当")
 	.option("--output-aac", "m4aファイルのかわりにaacファイルを出力する")
-	.option("--experimental-output-m4a", "非推奨 (現在はこの値に関わらずm4aを出力する)");
+	.option("--experimental-output-m4a", "非推奨 (現在はこの値に関わらずm4aを出力する)")
+	.option("--ogg-serial-offset <number>", "Oggのlogical bitstreamのシリアルナンバーを指定する");
 
 async function cli(): Promise<void> {
 	const options = commander.opts();
@@ -29,6 +30,9 @@ async function cli(): Promise<void> {
 	const channels: string = options.channels;
 	const rate: string = options.rate;
 	const outputAac = options.outputAac;
+	const oggOption = {
+		serialOffset: options.oggSerialOffset,
+	};
 	if (force && ignore) {
 		console.log("You can not provide force and ignore at the same time");
 		process.exit(1);
@@ -39,7 +43,7 @@ async function cli(): Promise<void> {
 		overwrite: force ? "force" : (ignore ? "ignore" : "question"),
 		ffmpegPath: ffmpeg,
 		outputM4a: !outputAac,
-		options: { bitrate, channels, rate }
+		options: { bitrate, channels, rate, oggOption },
 	});
 	console.log("done!");
 	process.exit(0);
