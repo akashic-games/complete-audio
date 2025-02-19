@@ -72,7 +72,7 @@ describe("FfmpegCommand", () => {
 				overwrite: "force"
 			});
 			expect(receivedOutputs).toEqual(["foo.aac"]);
-			expect(receivedOptions).toEqual(["-strict 2"]);
+			expect(receivedOptions).toEqual(["-map a", "-strict 2"]);
 		});
 
 		it("OGGtoM4A", async () => {
@@ -90,7 +90,7 @@ describe("FfmpegCommand", () => {
 				outputM4a: true
 			});
 			expect(receivedOutputs).toEqual(["foo.m4a"]);
-			expect(receivedOptions).toEqual(["-strict 2"]);
+			expect(receivedOptions).toEqual(["-map a", "-strict 2"]);
 		});
 
 		it("AACToOGG", async () => {
@@ -107,7 +107,7 @@ describe("FfmpegCommand", () => {
 				overwrite: "force"
 			});
 			expect(receivedOutputs).toEqual(["foo.ogg"]);
-			expect(receivedOptions).toEqual(["-acodec libvorbis"]);
+			expect(receivedOptions).toEqual(["-map a", "-acodec libvorbis"]);
 		});
 
 		it("toOGGAndAAC", async () => {
@@ -124,7 +124,7 @@ describe("FfmpegCommand", () => {
 				overwrite: "force"
 			});
 			expect(receivedOutputs).toEqual(["foo.aac", "foo.ogg"]);
-			expect(receivedOptions).toEqual(["-strict 2", "-acodec libvorbis"]);
+			expect(receivedOptions).toEqual(["-map a", "-strict 2", "-map a", "-acodec libvorbis"]);
 		});
 
 		it("toOGGAndM4A", async () => {
@@ -142,7 +142,7 @@ describe("FfmpegCommand", () => {
 				outputM4a: true
 			});
 			expect(receivedOutputs).toEqual(["foo.m4a", "foo.ogg"]);
-			expect(receivedOptions).toEqual(["-strict 2", "-acodec libvorbis"]);
+			expect(receivedOptions).toEqual(["-map a", "-strict 2", "-map a", "-acodec libvorbis"]);
 		});
 
 	});
