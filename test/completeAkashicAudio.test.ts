@@ -159,7 +159,7 @@ describe("FfmpegCommand", () => {
 				overwrite: "force",
 				outputM4a: true
 			});
-			expect(receivedOutputs).toEqual(["foo/foo1.m4a", "foo/foo2.m4a", "hoge/hoge.m4a"]);
+			expect(receivedOutputs).toEqual(["foo\/foo1.m4a", "foo\/foo2.m4a", "hoge\/hoge.m4a"]);
 		});
 
 		it ("specify file path", async() => { 
