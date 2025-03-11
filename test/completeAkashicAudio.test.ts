@@ -57,7 +57,7 @@ describe("FfmpegCommand", () => {
 	afterEach(function() {
 		expectFuncs = {};
 	});
-/*
+
 	describe("convert", () => {
 		it("OGGtoAAC", async () => {
 			const receivedOutputs: string[] = [];
@@ -147,7 +147,7 @@ describe("FfmpegCommand", () => {
 		});
 
 	});
-*/
+
 	describe("output option", () => {
 		it ("no output option", async() => { 
 			const receivedOutputs: string[] = [];
