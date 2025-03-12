@@ -152,6 +152,9 @@ describe("FfmpegCommand", () => {
 		it ("no output option", async() => { 
 			const receivedOutputs: string[] = [];
 			expectFuncs.output = (destPath: string) => {
+				if (isWindows) { 
+					destPath = destPath.replace(/\\/g, "/");
+				}
 				receivedOutputs.push(destPath);
 			};
 			
@@ -160,11 +163,7 @@ describe("FfmpegCommand", () => {
 				overwrite: "force",
 				outputM4a: true
 			});
-			if (isWindows) { 
-				expect(receivedOutputs).toEqual(["foo\\foo1.m4a", "foo\\foo2.m4a", "hoge\\hoge.m4a"]);
-			} else {
-				expect(receivedOutputs).toEqual(["foo/foo1.m4a", "foo/foo2.m4a", "hoge/hoge.m4a"]);
-			}
+			expect(receivedOutputs).toEqual(["foo/foo1.m4a", "foo/foo2.m4a", "hoge/hoge.m4a"]);
 		});
 
 		it ("specify file path", async() => { 
@@ -183,6 +182,9 @@ describe("FfmpegCommand", () => {
 		it ("specify directory path", async() => { 
 			let receivedOutputs: string[] = [];
 			expectFuncs.output = (destPath: string) => {
+				if (isWindows) { 
+					destPath = destPath.replace(/\\/g, "/");
+				}
 				receivedOutputs.push(destPath);
 			};
 			await completeAkashicAudio({
@@ -191,11 +193,7 @@ describe("FfmpegCommand", () => {
 				overwrite: "force",
 				outputM4a: true
 			});
-			if (isWindows) { 
-				expect(receivedOutputs).toEqual(["audio\\out\\foo1.m4a", "audio\\out\\foo2.m4a", "audio\\out\\hoge.m4a"]);
-			} else {
-				expect(receivedOutputs).toEqual(["audio/out/foo1.m4a", "audio/out/foo2.m4a", "audio/out/hoge.m4a"]);
-			}
+			expect(receivedOutputs).toEqual(["audio/out/foo1.m4a", "audio/out/foo2.m4a", "audio/out/hoge.m4a"]);
 
 			receivedOutputs = [];
 			await completeAkashicAudio({
