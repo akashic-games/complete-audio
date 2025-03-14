@@ -1,6 +1,7 @@
 jest.mock("fluent-ffmpeg");
 import ffmpeg from "fluent-ffmpeg";
 var  { completeAkashicAudio } = require("../lib/completeAkashicAudio");
+const isWindows = process.platform === "win32"
 
 describe("ffmpeg", () => {
 	it("sourcePath", () => {
@@ -151,6 +152,9 @@ describe("FfmpegCommand", () => {
 		it ("no output option", async() => { 
 			const receivedOutputs: string[] = [];
 			expectFuncs.output = (destPath: string) => {
+				if (isWindows) { 
+					destPath = destPath.replace(/\\/g, "/");
+				}
 				receivedOutputs.push(destPath);
 			};
 			
@@ -178,6 +182,9 @@ describe("FfmpegCommand", () => {
 		it ("specify directory path", async() => { 
 			let receivedOutputs: string[] = [];
 			expectFuncs.output = (destPath: string) => {
+				if (isWindows) { 
+					destPath = destPath.replace(/\\/g, "/");
+				}
 				receivedOutputs.push(destPath);
 			};
 			await completeAkashicAudio({
