@@ -30,7 +30,7 @@ akashicコンテンツで使用する音声ファイル名を指定してくだ�
 $ complete-audio sound.wav
 ```
 
-生成された音声ファイルの詳細な利用方法については、 [Akashic Engine 入門 (v2版) - 音を鳴らす](https://akashic-games.github.io/tutorial/v2/5-audio.html) を参照してください。
+生成された音声ファイルの詳細な利用方法については、 [Akashic Engine 入門 - 音を鳴らす](https://akashic-games.github.io/tutorial/v3/audio.html) を参照してください。
 
 ### FFmpegのライブラリについて
 
@@ -78,6 +78,14 @@ complete-audio sound.wav -i
 ```
 
 のように指定してください。
+
+### akashic コンテンツが v2 系以前の場合の対応
+v2 系以前の akashic コンテンツでは、M4A 形式 (.m4a)に対応していません。
+そのため、以下のように `--output-aac` オプションを用いて、m4a ファイルのかわりに aac ファイルを出力する必要があります。
+
+```sh
+complete-audio sound.wav --output-aac
+```
 
 ## ライセンス
 本リポジトリは MIT License の元で公開されています。
