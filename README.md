@@ -32,6 +32,14 @@ $ complete-audio sound.wav
 
 生成された音声ファイルの詳細な利用方法については、 [Akashic Engine 入門 - 音を鳴らす](https://akashic-games.github.io/tutorial/v3/audio.html) を参照してください。
 
+### Akashic Engine v2 以前で利用する場合
+complete-audio はデフォルトでは .ogg ファイルと .m4a ファイルを生成します。しかし Akashic Engine の v2 以前のバージョンは、.m4a ファイルに対応していません。
+そのため、以下のように `--output-aac` オプションを用いて、.m4a ファイルのかわりに .aac ファイルを出力する必要があります。
+
+```sh
+complete-audio sound.wav --output-aac
+```
+
 ### FFmpegのライブラリについて
 
 oggファイルを生成するときに `libvorbis` が存在する場合は
@@ -78,14 +86,6 @@ complete-audio sound.wav -i
 ```
 
 のように指定してください。
-
-### akashic コンテンツが v2 系以前の場合の対応
-v2 系以前の akashic コンテンツでは、M4A 形式 (.m4a)に対応していません。
-そのため、以下のように `--output-aac` オプションを用いて、m4a ファイルのかわりに aac ファイルを出力する必要があります。
-
-```sh
-complete-audio sound.wav --output-aac
-```
 
 ## ライセンス
 本リポジトリは MIT License の元で公開されています。
