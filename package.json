@@ -1,6 +1,6 @@
 {
   "name": "@akashic/complete-audio",
-  "version": "2.2.0-beta.0",
+  "version": "2.2.0-beta.1",
   "description": "complement audio asset files",
   "main": "lib/complete.js",
   "scripts": {
@@ -20,7 +20,8 @@
   },
   "files": [
     "bin",
-    "lib"
+    "lib",
+    "npm-shrinkwrap.json"
   ],
   "devDependencies": {
     "@akashic/eslint-config": "^0.1.2",
