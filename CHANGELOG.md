@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.2.0-beta.0
+* 内部モジュールの更新
+
 ## 2.1.0
 * Ogg Vorbisのlogical bitstreamのシリアルナンバーを指定する `--ogg-serial-offset` オプションを追加
 
