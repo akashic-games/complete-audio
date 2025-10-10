@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.1.1
+* パッケージ公開時に `npm-shrinkwrap.json` を同梱するように修正
+
 ## 2.2.0-beta.1
 * 内部モジュールの更新
 
