@@ -53,5 +53,12 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/akashic-games/complete-audio.git"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm",
+      "version": ">=11.11.0",
+      "onFail": "error"
+    }
   }
 }
