@@ -5,7 +5,7 @@ import { completeAkashicAudio } from "./completeAkashicAudio";
 
 const commander = new Command();
 
-var ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
+const ver = JSON.parse(fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8")).version;
 commander
 	.version(ver)
 	.usage("<filepath> <options>")
@@ -49,10 +49,10 @@ async function cli(): Promise<void> {
 	process.exit(0);
 }
 
-export function run(argv: string[]): void {
+export async function run(argv: string[]): Promise<void> {
 	if (argv.length < 3) {
 		commander.help();
 	}
 	commander.parse(argv);
-	cli();
+	await cli();
 }
